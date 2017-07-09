@@ -88,7 +88,7 @@ def gconnect():
     stored_access_token = session.get('access_token')
     stored_gplus_id = session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
+        response = make_response(json.dumps('You are already logged in.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -103,7 +103,6 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
     data = answer.json()
     session['username'] = data['name']
-    session['picture'] = data['picture']
     session['email'] = data['email']
 
     #see if user exists
@@ -114,8 +113,6 @@ def gconnect():
 
     output = ''
     output += '<h1>Welcome! </h1>'
-    output += '<img src="'
-    output += session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are logged in using your email address: %s" % session['email'])
     print ("done!")
@@ -153,19 +150,51 @@ def gdisconnect():
 
 # Producer CRUD Operations
 # 1 - Producer CREATE (Add)
-@app.route('/add/producer/')
+@app.route('/add/producer/', methods = ['GET', 'POST'])
 def addProducer():
+
     if 'username' not in session:
             flash('You must be logged in to add a producer.')
             return redirect(url_for('showLogin'))
-    return "page for adding a producer"
+
+    if request.method == 'GET':
+        return render_template('add_producer.html')
+
+    if request.method == 'POST':
+        newProducer = request.form['name']
+        newRegion = request.form['region']
+        newCountry = request.form['country']
+    # check whether this producer exists in the db already:
+
+    producer_id = dbsession.query(Producer.id).filter(func.lower(Producer.name) == func.lower(newProducer)).scalar()
+    if producer_id:
+        flash('{} is already listed in the database:'.format(newProducer))
+        return redirect(url_for('viewProducer', producer_id = producer_id))
+
+    # find the user's id by email lookup
+    user_id = dbsession.query(User.id).filter(User.email == session.get('email')).scalar()
+
+    # build a new Producer object
+    producer = Producer(name = newProducer, region = newRegion, nation = newCountry,\
+        added_by_id = user_id)
+    # add the new producer to the db and commit.
+    dbsession.add(producer)
+    dbsession.commit()
+
+    flash('New producer {} has been added!'.format(producer.name))
+    return redirect(url_for('viewProducer', producer_id = producer.id))
 
 # 2 - Producer READ (View) - Show all wines for a single producer
 @app.route('/view/producer/<int:producer_id>/')
 def viewProducer(producer_id):
     producer = dbsession.query(Producer).filter_by(id = producer_id).one()
-    winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id==producer_id)
-    return render_template('producer.html', producer = producer, winelist = winelist)
+    winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id == producer_id)
+    user = dbsession.query(User).filter_by(id = producer.added_by_id).one()
+    editFlag = (user.email == session.get('email'))
+    print("user.email = {}  | session email = {}".format(user.email, session.get('email')))
+    print (editFlag)
+
+    return render_template('producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
 
 # 3 - Producer UPDATE (Edit):
 @app.route('/edit/producer/<int:producer_id>/')
@@ -408,6 +437,6 @@ def getUserId(email):
 if __name__ == '__main__':
     # use a new secret key each time the program is run so that session info is cleared.
     #app.secret_key = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(32))
-    app.secret_key = "secret_key"
+    app.secret_key = "abracadabra"
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

@@ -12,9 +12,21 @@
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
-			<h1>{{producer.name}}</h1>
-			<h2>Region: {{producer.region}}</h2>
-			<h2>Country: {{producer.nation}}
+			<h1>Producer Info</h1>
+
+	<div class="flash_message","col-md-1">
+
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    </div>
+    <h2> {{producer.name}}
+			<h3>Region: {{producer.region}}</h3>
+			<h3>Country: {{producer.nation}}</h3>
 		</div>
 	</div>
 
@@ -32,4 +44,15 @@
 			</div>
 		</a>
 	{% endfor %}
+		{% if 'username' in session: %}
+		<div class = "conditional_links">
+		{% if editFlag %}
+		</br>
+		<a href = "{{url_for('editProducer', producer_id = producer.id)}}">Edit This Producer</a>
+		</br>
+		<a href = "{{url_for('deleteProducer', producer_id = producer.id)}}">Delete Producer</a>
+		{% endif %}
+		</div>
+	{% endif %}
+
 {% endblock %}
