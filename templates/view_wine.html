@@ -1,0 +1,77 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Wine Detail</h1>
+		</div>
+	</div>
+
+
+	<div class="row padding-top padding-bottom">
+	<div class="flash_message","col-md-1">
+
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    </div>
+
+	<div class = "producer_heading">
+		<p><a href="{{url_for('viewProducer', producer_id = wine.Producer.id)}}">
+		{{wine.Producer.name}}</a></p>
+	</div>
+
+	<div class = "wine_list, col-md-3">
+		<li><h3>{{wine.Wine.vintage}} | {{wine.Variety.name}}
+			{% if wine.Wine.tag: %}
+				| {{wine.Wine.tag}}
+			{% endif %}
+		</h3></li>
+	</div>
+		{% if wine.Wine.imageURL %}
+			<div class = "wine_image">
+				<img src = "{{wine.Wine.imageURL}}" class = "col-md-3">
+			</div>
+		{% endif %}
+
+	<div class = "reports">
+		<h3> User Reports </h3>
+		{% if reports %}
+		<ul>
+			{% for report in reports %}
+				<li>{{report.user_report}}</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			No reports to show.
+
+		{% endif %}
+	</div>
+
+
+	{% if 'username' in session: %}
+		<div class = "conditional_links">
+		</br>
+		<a href = "{{url_for('addReport', wine_id = wine.Wine.id)}}">Add Your Report</a></br>
+		{% if session.get('email') == wine.User.email: %}
+		<a href = "{{url_for('editWine', wine_id = wine.Wine.id)}}">Edit Tag or Image Link</a>
+		</br>
+		<a href = "{{url_for('deleteWine', wine_id = wine.Wine.id)}}">Delete this Wine Entry</a>
+		{% endif %}
+		</div>
+	{% endif %}
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Wines</h1>
+		</div>
+	</div>
+
+
+
+	<div class="flashmessages" class = "col-md-1">
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    </div>
+
+
+	{% for producer in allProducers %}
+	<div class = "producer_heading">
+	<p><a href = "{{url_for('viewProducer', producer_id = producer.id)}}">{{producer.name}}</a></p>
+	</div> <ul>
+		{% for wine in allWines: %}
+			{% if producer.id == wine.Wine.producer_id: %}
+				<div class = "wine_list">
+				<li><h3><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}}
+				 {% if wine.Wine.tag: %}
+				   | {{wine.Wine.tag}}
+				   {% endif %} </a>
+				</h3></li></div>
+			{% endif %}
+		{% endfor %} </ul>
+	{% endfor %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Delete a Wine</h1>
+		</div>
+	</div>
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+	</div>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+<form action = "/delete/wine/{{wine.Wine.id}}/" method = 'POST'>
+	<div class = "producer_heading">
+	<p><h2>{{wine.Producer.name}}</h2></p></div>
+				<div class = "wine_list">
+				<li><h3>{{wine.Wine.vintage}} | {{wine.Variety.name}}
+				</h3></li></div>
+	Delete this entry?
+	<input type = 'submit' value = 'Delete' onclick="return confirm('Are you sure?');">
+</form>
+{% endblock %}

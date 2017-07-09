@@ -1,0 +1,16 @@
+<div class="row top-menu">
+	<div class="col-md-6">
+		<a href="{{url_for('showAllWines')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Wines
+		</a>
+	</div>
+	<div class="col-md-6 text-right">
+    {% if session['email'] %}
+    <p><a href = "{{url_for('gdisconnect')}}">Log Out</a></p>
+
+    {% else %}
+
+    <p><a href = "{{url_for('showLogin')}}">Log In</a></p>
+    {% endif %}
+	</div>
+</div>

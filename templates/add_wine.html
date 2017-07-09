@@ -1,0 +1,58 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Add a Wine</h1>
+		</div>
+	</div>
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+	</div>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+<form action = "#" method = 'POST'>
+	<p> Add a Wine: Fields with an asterisk (*) are required. </p>
+	* Producer: (e.g. "Alamos") Click to select a producer from the list. If the producer is not listed, please <a href="{{url_for('addProducer')}}"> add the producer</a> first.</br>
+	<select name ='producer'>
+		<option value selected disabled = 'Please select a producer'>Select</option>
+		{% for producer in producers: %}
+			<option value = '{{producer.name}}'>{{producer.name}}</option>
+		{% endfor %}
+	</select>
+	</br></br>
+	* Variety: (click to select from list)</br>
+	<select name ='variety'>
+		<option value selected disabled = 'none'>Please Select</option>
+		{% for variety in varieties: %}
+			<option value = '{{variety.name}}'>{{variety.name}}</option>
+		{% endfor %}
+		<option value = 'other'>other</option>
+	</select>
+	</br></br>
+	* Vintage: (Year in YYYY format)</br>
+	<input type = 'number' size ='4' name='vintage' min = '1900' max = '{{year}}'>
+	</br></br>
+	Image Link:</br>
+	<input type = 'url' size = '50' name='imageURL' placeholder = 'Image Link'>
+	</br></br>
+	Tags: (enter any additional information, such as "Bin 55," "Bordeaux," or "sauterne")
+	<input size = '25' name = 'tags' placeholder = 'Tags'></br>
+	</br></br>
+	<input type = 'submit' value = 'Add Wine'>
+</form>
+{% endblock %}
