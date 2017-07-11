@@ -194,7 +194,7 @@ def viewProducer(producer_id):
     print("user.email = {}  | session email = {}".format(user.email, session.get('email')))
     print (editFlag)
 
-    return render_template('producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
+    return render_template('view_producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
 
 # 3 - Producer UPDATE (Edit):
 @app.route('/edit/producer/<int:producer_id>/')
@@ -205,12 +205,47 @@ def editProducer(producer_id):
     return "page for editing a producer"
 
 # 4 - Producer DELETE
-@app.route('/delete/producer/<int:producer_id>/')
+@app.route('/delete/producer/<int:producer_id>/', methods = ['GET', 'POST'])
 def deleteProducer(producer_id):
     if 'username' not in session:
         flash('You must be logged in to delete a producer.')
         return redirect(url_for('showLogin'))
-    return "page for deleting a producer"
+
+# *** TO DO *** - check for valid producer #
+
+    if request.method == 'GET':
+        producer = dbsession.query(Producer).filter_by(id = producer_id).one()
+        winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id == producer_id)
+        user = dbsession.query(User).filter_by(id = producer.added_by_id).one()
+        editFlag = (user.email == session.get('email'))
+        print("user.email = {}  | session email = {}".format(user.email, session.get('email')))
+        print (editFlag)
+        return render_template('delete_producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
+
+    if request.method == 'POST':
+        if 'username' not in session:
+            flash('You must be logged in to delete a wine.')
+            return redirect(url_for('showLogin'))
+
+        wines = dbsession.query(Wine).filter(Wine.producer_id == producer_id).all()
+        for wine in wines:
+            print (wine.vintage)
+        reports = dbsession.query(Report).join(Wine, Wine.id == Report.wine_id).\
+                                          join(Producer, Wine.producer_id == Producer.id).\
+                                          filter(Wine.producer_id == Producer.id).all()
+        for report in reports:
+            print (report.user_report)
+
+        producer = dbsession.query(Producer).filter_by(id = producer_id).one()
+
+        for report in reports:
+            dbsession.delete(report)
+        for wine in wines:
+            dbsession.delete(wine)
+        dbsession.delete(producer)
+        dbsession.commit()
+        flash('Producer and related data deleted!')
+        return redirect(url_for('showAllWines'))
 
 # Wine CRUD Operations
 
@@ -346,6 +381,8 @@ def editWine(wine_id):
 
 @app.route('/delete/wine/<int:wine_id>/', methods = ['GET', 'POST'])
 def deleteWine(wine_id):
+
+    # ****TO DO: Check for valid wine ID ***
     if request.method == 'GET':
         if 'username' not in session:
             flash('You must be logged in to delete a wine.')

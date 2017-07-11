@@ -1,0 +1,52 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Delete a Producer</h1>
+		</div>
+	</div>
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+	</div>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+<form action = "/delete/producer/{{producer.id}}/" method = 'POST'>
+     <div class = "producer_heading">
+    <h2> {{producer.name}}</h2></div>
+    <div class = "producer_data">
+            <h3>Region: {{producer.region}}</h3>
+            <h3>Country: {{producer.nation}}</h3>
+    </div>
+
+    {% for wine in winelist %}
+        <div class="row, col-md-10 producer-wine-list">
+            <p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}} | {{wine.Wine.color}}</a></p>
+        </div>
+     {% endfor %}
+     <div class = "col-md-12">
+	Deleting this producer will remove all producer information, all wines from the producer, and all reports entered for this producer's wines. Are you sure you want to delete this producer?
+    </div>
+     <div class="row padding-top padding-bottom"></div>
+    <div class = "col-md-2">
+	<input type = 'submit' value = 'Delete' onclick="return confirm('Are you sure?');">
+    </div>
+        <div class="row padding-top padding-bottom"></div>
+</form>
+{% endblock %}
+
+

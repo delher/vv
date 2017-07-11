@@ -23,27 +23,18 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+    <div class = "producer_heading">
+    <h2> {{producer.name}}</h2></div>
+    <div class = "producer_data">
+            <h3>Region: {{producer.region}}</h3>
+            <h3>Country: {{producer.nation}}</h3>
     </div>
-    <h2> {{producer.name}}
-			<h3>Region: {{producer.region}}</h3>
-			<h3>Country: {{producer.nation}}</h3>
-		</div>
-	</div>
 
-
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-	</div>
-	{% for wine in winelist %}
-			<div class="row">
-				<div class="col-md-1"></div>
-					<div class="col-md-10 producer-wine-list">
-						<p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}} | {{wine.Wine.color}}</a></p>
-					</div>
-				<div class="col-md-1"></div>
-			</div>
-		</a>
-	{% endfor %}
+    {% for wine in winelist %}
+                    <div class="row, col-md-10 producer-wine-list">
+                        <p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}} | {{wine.Wine.color}}</a></p>
+                    </div>
+     {% endfor %}
 		{% if 'username' in session: %}
 		<div class = "conditional_links">
 		{% if editFlag %}
