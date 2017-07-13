@@ -18,7 +18,7 @@ class User(Base):
 class Producer(Base):
     __tablename__ = 'producer'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    name = Column(String(250), nullable=False, unique=True)
     nation = Column(String(250))
     region = Column(String(250))
     added_by_id = Column(Integer, ForeignKey('user.id'))

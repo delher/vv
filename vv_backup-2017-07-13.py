@@ -113,7 +113,9 @@ def gconnect():
 
     output = ''
     output += '<h1>Welcome! </h1>'
-    flash("You are logged in using your email address: %s" % session['email'])
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    flash("you are logged in using your email address: %s" % session['email'])
+    print ("done!")
     return output
 
 @app.route('/logout')
@@ -185,61 +187,22 @@ def addProducer():
 # 2 - Producer READ (View) - Show all wines for a single producer
 @app.route('/view/producer/<int:producer_id>/')
 def viewProducer(producer_id):
-    producer = check_producer_ID(producer_id)
-    if producer.name == "None":
-        flash('Producer ID not valid.')
-        return redirect(url_for('showAllWines'))
+    producer = dbsession.query(Producer).filter_by(id = producer_id).one()
     winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id == producer_id)
     user = dbsession.query(User).filter_by(id = producer.added_by_id).one()
     editFlag = (user.email == session.get('email'))
-
+    print("user.email = {}  | session email = {}".format(user.email, session.get('email')))
+    print (editFlag)
 
     return render_template('view_producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
 
 # 3 - Producer UPDATE (Edit):
-@app.route('/edit/producer/<int:producer_id>/', methods = ['GET', 'POST'])
+@app.route('/edit/producer/<int:producer_id>/')
 def editProducer(producer_id):
     if 'username' not in session:
         flash('You must be logged in to edit a producer.')
         return redirect(url_for('showLogin'))
-
-# check for a valid producer
-    producer = check_producer_ID(producer_id)
-    if producer.name == "None":
-        flash('Producer ID not valid.')
-        return redirect(url_for('showAllWines'))
-
-# Make sure the user trying to edit the producer info was the one who entered it.
-
-    user = dbsession.query(User).filter_by(id = producer.added_by_id).one()
-    if user.email != session.get('email'):
-        flash('Producer information can only be added by the user who added it.')
-        return redirect (url_for('showAllWines'))
-
-# For a GET request, send back the editing page.
-    if request.method == 'GET':
-
-        editFlag = (user.email == session.get('email'))
-        return render_template('edit_producer.html', producer = producer, editFlag = editFlag)
-
-    if request.method == 'POST':
-        producer.name = request.form['name'].title()
-        producer.region = request.form['region']
-        producer.nation = request.form['country']
-
-    # Try to add the edited producer name;
-    # If the name was changed to another existing producer name, SQLAlchemy will return an error.
-        try:
-            dbsession.commit()
-
-        except:
-            dbsession.rollback()
-            flash('Your changes wered not saved - Your edit may have duplicated another entry.')
-            return redirect(url_for('viewProducer', producer_id = producer_id))
-
-        flash('Your changes have been saved')
-        return redirect(url_for('viewProducer', producer_id = producer_id))
-
+    return "page for editing a producer"
 
 # 4 - Producer DELETE
 @app.route('/delete/producer/<int:producer_id>/', methods = ['GET', 'POST'])
@@ -248,14 +211,15 @@ def deleteProducer(producer_id):
         flash('You must be logged in to delete a producer.')
         return redirect(url_for('showLogin'))
 
-# check for valid producer #
-
+# *** TO DO *** - check for valid producer #
 
     if request.method == 'GET':
         producer = dbsession.query(Producer).filter_by(id = producer_id).one()
         winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id == producer_id)
         user = dbsession.query(User).filter_by(id = producer.added_by_id).one()
         editFlag = (user.email == session.get('email'))
+        print("user.email = {}  | session email = {}".format(user.email, session.get('email')))
+        print (editFlag)
         return render_template('delete_producer.html', producer = producer, winelist = winelist, editFlag = editFlag)
 
     if request.method == 'POST':
@@ -366,9 +330,7 @@ def editWine(wine_id):
         if 'username' not in session:
             flash('You must be logged in to edit a wine.')
             return redirect(url_for('showLogin'))
-    # if the user is logged in, see if there's a record for the wine ID.
-    # if the wine exists, the details will be used later, so make a join-table query
-    # so we don't have to send another query to get them.
+    # if the user is logged in, see if there's a record for the wine ID:
         try:
             wine = dbsession.query(Wine, Producer, Variety, User).\
                 join(Variety, Wine.variety_id == Variety.id).\
@@ -508,18 +470,6 @@ def getUserId(email):
         return user.id
     except:
         return None
-
-# Valid Producer Check
-def check_producer_ID(producer_id):
-    try:
-        producer = dbsession.query(Producer).filter_by(id = producer_id).one()
-
-    except:
-        print ('Error on producer lookup, setting name = None')
-        producer = Producer(name="None")
-
-    return producer
-
 
 if __name__ == '__main__':
     # use a new secret key each time the program is run so that session info is cleared.
