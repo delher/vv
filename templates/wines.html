@@ -23,12 +23,12 @@
 
 	{% for producer in allProducers %}
 	<div class = "producer_heading">
-	<p><a href = "{{url_for('viewProducer', producer_id = producer.id)}}">{{producer.name}}</a></p>
-	</div> <ul>
+	<p><a href = "{{url_for('viewProducer', producer_id = producer.id)}}" class="producer_heading">{{producer.name}}</a></p>
+	</div> <ul class="wine_list">
 		{% for wine in allWines: %}
 			{% if producer.id == wine.Wine.producer_id: %}
 				<div class = "wine_list">
-				<li><h3><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}}
+				<li><h3><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}" class="wine_list">{{wine.Wine.vintage}} | {{wine.Variety.name}}
 				 {% if wine.Wine.tag: %}
 				   | {{wine.Wine.tag}}
 				   {% endif %} </a>

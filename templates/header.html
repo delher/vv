@@ -1,4 +1,5 @@
- <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+ <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse navbar-fixed-top">
+    <div class = "container">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -18,7 +19,7 @@
           <li class="nav-item {% if request.path == '/add/wine/' %} active {% endif %}">
            <a class="nav-link" href="{{url_for('addWine')}}">Add a Wine</a>
           </ul>
-          <a href = "/logout"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
+          <a href = "/logout"><button class="btn navbar-btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
 
            {% else %}
 <!-- Show Nav choices for logged out user -->
@@ -29,8 +30,14 @@
            <a class="nav-link disabled" href="">Add Wine</a>
            </li>
           </ul>
-          <a href = "/login"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button></a>
+          <a href = "/login"><button class="btn navbar-btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button></a>
            {% endif %}
-      </div>
+      </div> <!-- close collapse div -->
+      </div> <!-- end of container div -->
     </nav>
+<!-- repeating wine glass banner -->
+  <div class="banner">
+    <div class="col-md-1"></div>
+    <div class="col-md-11 padding-none">
+    </div>
 
