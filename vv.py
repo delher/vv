@@ -511,6 +511,6 @@ def check_producer_ID(producer_id):
 if __name__ == '__main__':
     # use a new secret key each time the program is run so that session info is cleared.
     #app.secret_key = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(32))
-    app.secret_key = "abracadabra"
+    app.secret_key = "li59f8kyf03hdf42dzhf7"
     app.debug = True
     app.run(host='0.0.0.0', port=5000)

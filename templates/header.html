@@ -1,18 +1,36 @@
-<div class="row top-menu">
-	<div class="col-md-6">
-    <ul><li>
-		<a href="{{url_for('showAllWines')}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Wines
+ <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Vintage Values</a>
 
-	</div>
+<!-- Show Nav choices for logged in user -->
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item
+          {% if request.path == '/' %} active {% endif %}">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+             {% if session['email'] %}
+          <li class="nav-item {% if request.path == '/add/producer/' %} active {% endif %}">
+            <a class="nav-link" href="{{url_for('addProducer')}}">Add a Producer</a>
+          </li>
+          <li class="nav-item {% if request.path == '/add/wine/' %} active {% endif %}">
+           <a class="nav-link" href="{{url_for('addWine')}}">Add a Wine</a>
+          </ul>
+          <a href = "/logout"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
 
-	<div class="col-md-6 text-right">
-    {% if session['email'] %}
-    <p><a href = "{{url_for('gdisconnect')}}">Log Out</a></p>
+           {% else %}
+<!-- Show Nav choices for logged out user -->
+            <li class="nav-item">
+            <a class="nav-link disabled" href="#">Add Producer</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link disabled" href="">Add Wine</a>
+           </li>
+          </ul>
+          <a href = "/login"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button></a>
+           {% endif %}
+      </div>
+    </nav>
 
-    {% else %}
-
-    <p><a href = "{{url_for('showLogin')}}">Log In</a></p>
-    {% endif %}
-	</div>
-</div>
