@@ -31,7 +31,7 @@ def showLogin():
         return redirect(url_for('showAllWines'))
 
         return response
-    state = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(32))
+    state = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(32))
     session['state'] = state
     return render_template('login.html', STATE = state)
 
@@ -59,7 +59,6 @@ def gconnect():
 
     # check that the access token is valid.
     access_token = credentials.access_token
-    print("access token = {}".format(access_token))
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
     h = httplib2.Http()
     httpresponse = h.request(url,'GET')[1]
@@ -81,7 +80,6 @@ def gconnect():
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
         response = make_response(json.dumps("Token's client ID does not match app's."), 401)
-        print ("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -132,9 +130,7 @@ def gdisconnect():
     # revoke token
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
-    print (url)
     result = h.request(url, 'GET')[0]
-    print (result['status'])
     if result['status'] == '200':
         # reset the session
         session.clear()
@@ -170,7 +166,7 @@ def addProducer():
         return redirect(url_for('viewProducer', producer_id = producer_id))
 
     # find the user's id by email lookup
-    user_id = dbsession.query(User.id).filter(User.email == session.get('email')).scalar()
+    user_id = getUserId(session.get('email'))
 
     # build a new Producer object
     producer = Producer(name = newProducer, region = newRegion, nation = newCountry,\
@@ -186,7 +182,7 @@ def addProducer():
 @app.route('/view/producer/<int:producer_id>/')
 def viewProducer(producer_id):
     producer = check_producer_ID(producer_id)
-    if producer.name == "None":
+    if producer == None:
         flash('Producer ID not valid.')
         return redirect(url_for('showAllWines'))
     winelist = dbsession.query(Wine, Variety).join(Variety, Wine.variety_id == Variety.id).filter(Wine.producer_id == producer_id)
@@ -205,7 +201,7 @@ def editProducer(producer_id):
 
 # check for a valid producer
     producer = check_producer_ID(producer_id)
-    if producer.name == "None":
+    if producer == None:
         flash('Producer ID not valid.')
         return redirect(url_for('showAllWines'))
 
@@ -264,13 +260,9 @@ def deleteProducer(producer_id):
             return redirect(url_for('showLogin'))
 
         wines = dbsession.query(Wine).filter(Wine.producer_id == producer_id).all()
-        for wine in wines:
-            print (wine.vintage)
         reports = dbsession.query(Report).join(Wine, Wine.id == Report.wine_id).\
                                           join(Producer, Wine.producer_id == Producer.id).\
                                           filter(Wine.producer_id == Producer.id).all()
-        for report in reports:
-            print (report.user_report)
 
         producer = dbsession.query(Producer).filter_by(id = producer_id).one()
 
@@ -325,11 +317,13 @@ def addWine():
         if not newWineVarietyId:
             flash('Variety Selection Error. Please select a variety from the list.')
             return render_template("add_wine.html")
+        user_id = getUserId(session.get('email'))
         wine = Wine (vintage = newWineVintage,
                      variety_id=newWineVarietyId,
                      producer_id = newWineProducerId,
                      tag = newWineTag,
-                     imageURL = newWineURL)
+                     imageURL = newWineURL,
+                     added_by_id = user_id)
         dbsession.add(wine)
         dbsession.commit()
         flash('New wine added!')
@@ -362,7 +356,6 @@ def viewWine(wine_id):
 def editWine(wine_id):
     # check for user login status
     if request.method == 'GET':
-        print (session.get('username'))
         if 'username' not in session:
             flash('You must be logged in to edit a wine.')
             return redirect(url_for('showLogin'))
@@ -472,8 +465,6 @@ def addReport(wine_id):
 @app.route('/JSON/<int:producer_id>')
 def wineListJSON(producer_id):
     json_producer = dbsession.query(Producer).filter(Producer.id == producer_id)
-    for item in json_producer:
-        print(item.name)
     json_dict={}
     wines_to_jsonify = dbsession.query(Wine, Producer, Variety).\
                         join(Variety, Wine.variety_id == Variety.id).\
@@ -481,8 +472,6 @@ def wineListJSON(producer_id):
                         filter(Producer.id == producer_id).all()
     wines_to_jsonify = dbsession.query(Wine).\
                        filter_by(producer_id = producer_id).all()
-    for wine in wines_to_jsonify:
-        print ("{} {} {}".format (wine.producer_id, wine.id, wine.vintage))
     return jsonify(Wine = [i.serialize for i in wines_to_jsonify])
 
 
@@ -492,10 +481,10 @@ def duplicateWineError(wine_id):
 # User Helper Functions
 
 def createUser(session):
-    newUser = User(handle = session['username'], email = session['email'])
+    newUser = User(name = session['username'], email = session['email'])
     dbsession.add(newUser)
     dbsession.commit()
-    user = dbsession.query(User).filter(email=session['email']).one()
+    user = dbsession.query(User).filter(User.email==session['email']).one()
     return user.id
 
 def getUserInfo(user_id):
@@ -513,12 +502,10 @@ def getUserId(email):
 def check_producer_ID(producer_id):
     try:
         producer = dbsession.query(Producer).filter_by(id = producer_id).one()
+        return producer
 
     except:
-        print ('Error on producer lookup, setting name = None')
-        producer = Producer(name="None")
-
-    return producer
+        return None
 
 
 if __name__ == '__main__':
