@@ -1,66 +1,59 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+<div class="container-fluid">
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<h1>Wine Detail</h1>
-		</div>
-	</div>
+            </div>
 
 
-	<div class="row padding-top padding-bottom">
-	<div class="flash_message","col-md-1">
 
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-	{% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-    </div>
-
-	<div class = "producer_heading">
-		<p><a href="{{url_for('viewProducer', producer_id = wine.Producer.id)}}">
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<div class="col-md-4">
+				{% for message in messages %}
+					<li class="flash_message">{{ message }}</li>
+				{% endfor %}
+			{% endif %}
+    	{% endwith %}
+    </div> <!-- end of flash message div -->
+    <div class= "row">
+	<div class = "producer_heading col-md-3">
+		<a href="{{url_for('viewProducer', producer_id = wine.Producer.id)}}">
 		{{wine.Producer.name}}</a></p>
-	</div>
+	</div> <!-- end of producer heading div -->
 
-	<div class = "wine_list, col-md-3">
+	<div class = "wine_list col-md-3">
 		<li><h3>{{wine.Wine.vintage}} | {{wine.Variety.name}}
 			{% if wine.Wine.tag: %}
 				| {{wine.Wine.tag}}
 			{% endif %}
 		</h3></li>
-	</div>
+	</div> <!-- end of wine_list div -->
+	<!-- see if we have an image for this wine -->
 		{% if wine.Wine.imageURL %}
-			<div class = "wine_image">
-				<img src = "{{wine.Wine.imageURL}}" class = "col-md-3">
-			</div>
+			<div class = "row wine_image col-md-3">
+				<img src = "{{wine.Wine.imageURL}}">
+			</div> <!-- end of wine_image div -->
 		{% endif %}
 
-	<div class = "reports">
+
+	<div class = "reports col-md-3">
 		<h3> User Reports </h3>
 		{% if reports %}
-		<ul>
-			{% for report in reports %}
-				<li>{{report.user_report}}</li>
-			{% endfor %}
-		</ul>
+			<ul>
+				{% for report in reports %}
+					<li>{{report.user_report}}</li>
+				{% endfor %}
+			</ul>
 		{% else %}
 			No reports to show.
 
 		{% endif %}
-	</div>
-
+	</div> <!-- end of reports div -->
+ 	</div> <!-- end row div -->
 
 	{% if 'username' in session: %}
 		<div class = "conditional_links">
@@ -71,7 +64,7 @@
 		</br>
 		<a href = "{{url_for('deleteWine', wine_id = wine.Wine.id)}}">Delete this Wine Entry</a>
 		{% endif %}
-		</div>
+		</div> <!-- end of conditional_links div -->
 	{% endif %}
-
+</div> <!-- end of Bootstrap container-fluid div -->
 {% endblock %}

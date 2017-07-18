@@ -1,39 +1,37 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-		<div class="col-md-12">
-
-			<h1>Wines</h1>
-		</div>
-	</div>
-
-
-
+<div class="container_fluid">
+	<h1>Wines</h1>
 
 	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-		<div class="flashmessages col-md-12">
-		{% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %} </br>
-    {% endif %}
-    {% endwith %}
-    </div>
-
+		{% if messages %}
+			<div class="col-md-6">
+			{% for message in messages %}
+      			<li class="flash_message">{{ message }}</li>
+    		{% endfor %} </br>
+    		</div> <!-- end of flashmessages div -->
+    	{% endif %}
+	{% endwith %}
 
 	{% for producer in allProducers %}
-	<div class = "producer_heading">
-	<p><a href = "{{url_for('viewProducer', producer_id = producer.id)}}" class="producer_heading">{{producer.name}}</a></p>
-	</div> <ul class="wine_list">
+		<div class = "producer_main_list col-md-12">
+			<a href = "{{url_for('viewProducer', producer_id = producer.id)}}" class="producer_main_list">{{producer.name}}</a>
+		</div> <!-- end of producer_main_list div -->
+		<ul><div class = "row">
 		{% for wine in allWines: %}
 			{% if producer.id == wine.Wine.producer_id: %}
-				<div class = "wine_list">
-				<li><h3><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}" class="wine_list">{{wine.Wine.vintage}} | {{wine.Variety.name}}
+				<div class = "col-md-6">
+				<li><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}"
+				class = "wine_main_list">{{wine.Wine.vintage}} | {{wine.Variety.name}}
 				 {% if wine.Wine.tag: %}
-				   | {{wine.Wine.tag}}
-				   {% endif %} </a>
-				</h3></li></div>
+				   	| {{wine.Wine.tag}}
+				  {% endif %} </a></li>
+				</div> <!-- end of winelist div -->
 			{% endif %}
-		{% endfor %} </ul>
+		{% endfor %} </div> <!-- end of row div -->
+		</ul>
 	{% endfor %}
+</div> <!-- end of container_fluid col-md-12 div -->
 {% endblock %}
+

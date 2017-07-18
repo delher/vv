@@ -1,39 +1,36 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+<div class="container_fluid">
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<h1>Producer Info</h1>
+            </div>
 
-	<div class="flash_message","col-md-1">
+
 
 	{% with messages = get_flashed_messages() %}
 	{% if messages %}
+    <div class="col-md-4">
 	{% for message in messages %}
-      <li>{{ message }}</li>
+      <li class="flash_message">{{ message }}</li>
     {% endfor %}
     {% endif %}
     {% endwith %}
+    </div><!-- end of flash message div -->
     <div class = "producer_heading">
-    <h2> {{producer.name}}</h2></div>
+    <h2> {{producer.name}}</h2>
+    </div><!-- end of producer heading div -->
     <div class = "producer_data">
             <h3>Region: {{producer.region}}</h3>
             <h3>Country: {{producer.nation}}</h3>
-    </div>
+    </div><!-- end of producer data div -->
 
     {% for wine in winelist %}
-                    <div class="row, col-md-10 producer-wine-list">
+                    <div class="col-md-6 producer-wine-list">
                         <p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}} | {{wine.Wine.color}}</a></p>
-                    </div>
+                    </div> <!-- end of wine list div -->
      {% endfor %}
 		{% if 'username' in session: %}
 		<div class = "conditional_links">
@@ -43,7 +40,8 @@
 		</br>
 		<a href = "{{url_for('deleteProducer', producer_id = producer.id)}}">Delete Producer</a>
 		{% endif %}
-		</div>
-	{% endif %}
+		</div><!-- end of conditional links div -->
 
+	{% endif %}
+</div> <!-- end of container_fluid -->
 {% endblock %}

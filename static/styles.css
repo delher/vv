@@ -1,3 +1,27 @@
+a:hover {
+	text-decoration: none;
+	color: white;
+}
+a.producer_main_list {
+	font-size: 26px;
+	color: #bb77bb;
+	line-height: 29px;
+	font-weight: 500;
+	padding: 1rem;
+	text-decoration: none;
+}
+
+a.wine_main_list {
+	font-size: 20 px;
+	color: #ccc;
+}
+
+a.wine_main_list:hover {
+	color: #fff;
+}
+
+
+
 .banner {
 	height: 150px;
 	background: url("/static/wineglass74x150.png");
@@ -15,26 +39,47 @@ h1 {
 	line-height: 60px;
 	font-weight: 300;
 	text-shadow: 3px 3px #444;
+	padding: 20px;
 }
 
 .producer_heading {
-	font-size: 28px;
-	color: #888;
+	font-size: 32px;
+	color: #bb77bb;
+	line-height: 29px;
+	font-weight: 500;
+	padding: 2rem;
+}
+
+.producer_main_list {
+	font-size: 26px;
+	color: #bb77bb;
 	line-height: 29px;
 	font-weight: 500;
 	padding: 1rem;
 }
 
 .wine_list {
-	margin-left: 1rem;
+	padding: 2rem;
+	color: #dddddd;
+}
+
+.reports {
+	padding: 2rem;
+	color: #fff;
 }
 
 h3 {
 	font-size: 18px;
-	color: #4A4A4A;
+	color: #bb77bb;
 	line-height: 23px;
+}
 
-.flashmessages {
-	font-family: "comic sans", serif;
-	color: red;
+.flash_message {
+	font-family: "Arial", sans-serif;
+	font-size:16 px;
+	color: green;
+	padding:20px;
+	border-style: solid;
+	border-width:1px;
+	list-style:none;
 }
