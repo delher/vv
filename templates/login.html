@@ -1,22 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-</script>
-<script src = "https://apis.google.com/js/client:platform.js?onload=start">
-</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'navbar.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+  <script src = "//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+  </script>
+  <script src = "https://apis.google.com/js/client:platform.js?onload=start">
+  </script>
 </head>
 <body>
-<div class = "flashmessages" class = "col-md-1">
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse navbar-fixed-top">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Vintage Values</a>
+
+<!-- Show Nav choices for logged in user -->
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item
+          {% if request.path == '/' %} active {% endif %}">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+             {% if session['email'] %}
+          <li class="nav-item {% if request.path == '/add/producer/' %} active {% endif %}">
+            <a class="nav-link" href="{{url_for('addProducer')}}">Add a Producer</a>
+          </li>
+          <li class="nav-item {% if request.path == '/add/wine/' %} active {% endif %}">
+           <a class="nav-link" href="{{url_for('addWine')}}">Add a Wine</a>
+          </ul>
+          <a href = "/logout"><button class="btn navbar-btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button></a>
+
+           {% else %}
+<!-- Show Nav choices for logged out user -->
+            <li class="nav-item">
+            <a class="nav-link disabled" href="#">Add Producer</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link disabled" href="">Add Wine</a>
+           </li>
+          </ul>
+          <a href = "/login"><button class="btn navbar-btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button></a>
+           {% endif %}
+      </div> <!-- close collapse div -->
+    </nav>
+<div class="container_fluid">
+  <div class = "row banner">
+    <div class = "col-md-1">
+      <!-- spacer - nothing to see here -->
     </div>
-<div id = "signInButton">
+    <div class = "col-md-11 padding-none">
+      <h1>Log In</h1>
+    </div> <!-- end of col-md-11 title-Wines div-->
+  </div> <!-- end of row banner div -->
+  <div class = "row login">
+    <div class = "col-md-1">
+    <!-- spacer column - Nothing to see here -->
+    </div>
+  <div class = "col-md-4 signInText" id="result">
+  <p>Please sign in using your Google login.</p>
+  </div>
+  <div class = "col-md-1">
+    <!-- spacer column - Nothing to see here -->
+    </div>
+
+<div id = "signInButton" class= "col-md-4">
     <span class = "g-signin"
         data-scope = "openid email"
         data-clientid = "948158821671-abfm7ih39ak8epfsl6lakeus7ajmkan7.apps.googleusercontent.com"
@@ -27,7 +80,12 @@
         data-approvalprompt = "force">
     </span>
 </div>
-<div id = "result"></div>
+</div> <!-- end of row login div -->
+<div class="row signInText">
+<div class="col-md-12"></div>
+</div><!-- end of row login div  -->
+</div>
+</div> <!-- end of container_fluid div -->
 <script>
 function signInCallback(authResult) {
     if (authResult['code']) {
@@ -43,7 +101,7 @@ function signInCallback(authResult) {
       success: function(result) {
         // Handle or verify the server response if necessary.
         if (result) {
-          $('#result').html('Login Successful!</br>'+ result + '</br>Logging into Winebox...')
+          $('#result').html('Logging into Vintage Values...')
          setTimeout(function() {
           window.location.href = "/";
          }, 3000);

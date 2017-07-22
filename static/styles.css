@@ -11,6 +11,10 @@ a.producer_main_list {
 	text-decoration: none;
 }
 
+a.conditional_links {
+	color: #ffcbf1;
+}
+
 a.wine_main_list {
 	font-size: 20 px;
 	color: #ccc;
@@ -20,12 +24,11 @@ a.wine_main_list:hover {
 	color: #fff;
 }
 
-
-
 .banner {
 	height: 150px;
 	background: url("/static/wineglass74x150.png");
 	background-repeat: repeat-x;
+	margin-bottom: 15px;
 }
 
 body {
@@ -40,14 +43,51 @@ h1 {
 	font-weight: 300;
 	text-shadow: 3px 3px #444;
 	padding: 20px;
+	-moz-border-radius:10px;
+	webkit-border-radius:10px;
+	border-radius:50px;
+	background: #fff; /* fallback for browsers that don't understand rgba */
+	border: solid 1px #000; /* fallback for browsers that don't understand rgba */
+	background-color: rgba(0,0,0,0.4); /* slighly transparent white */
+	border-color: rgba(0,0,0,0.2); /*Very transparent black*/
+	display:inline-flex;
+	margin-top:20px;
+
+}
+.button_row {
+	padding-top: 10px;
+}
+.edit_button {
+
+	background-color: rgba(0,0,0,0);
+	border-radius:4px;
+    color: green;
+    font-size:20px;
+    border: 1px solid #4CAF50; /* Green */
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
+.edit_button:hover {
+	color: #00ff00;
+	box-shadow: 0 0 4px 4px rgba(0,256,0,0.2), 0 0 4px 4px rgba(0,256,0,0.2);
+}
+
+.edit_producer_label {
+	color: #dddddd;
+	padding: 10px;
+}
+
+.edit_producer_text {
+	color: #dedede;
+}
 .producer_heading {
 	font-size: 32px;
 	color: #bb77bb;
 	line-height: 29px;
 	font-weight: 500;
 	padding: 2rem;
+
 }
 
 .producer_main_list {
@@ -77,9 +117,22 @@ h3 {
 .flash_message {
 	font-family: "Arial", sans-serif;
 	font-size:16 px;
-	color: green;
-	padding:20px;
+	color: #00aa00;
+	padding:10px;
+	display: table-cell;
 	border-style: solid;
 	border-width:1px;
 	list-style:none;
+	margin-left: 20px;
+}
+.signInText{
+	color: #aaa;
+}
+
+.login {
+	margin: 20px;
+	padding: 20px;
+}
+.region_data {
+	color: #ccc;
 }

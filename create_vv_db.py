@@ -64,8 +64,5 @@ class Report(Base):
     user_report = Column(String, nullable=False)
     entry_time = Column(DATETIME, nullable=False)
 
-
-
-
 engine = create_engine('sqlite:///vv.db')
 Base.metadata.create_all(engine)

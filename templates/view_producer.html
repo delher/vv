@@ -6,41 +6,47 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<h1>Producer Info</h1>
-            </div>
+        </div>
+    </div><!-- end of row banner main -->
 
-
-
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-    <div class="col-md-4">
-	{% for message in messages %}
-      <li class="flash_message">{{ message }}</li>
-    {% endfor %}
-    {% endif %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row">
+                    <div class = "col-md-1"> </div>
+                    <div class = "col-md-11"><p class = "flash_message">{{ message }}</p></div>
+                </div><!-- end of row div -->
+            {% endfor %}
+        {% endif %}
     {% endwith %}
-    </div><!-- end of flash message div -->
-    <div class = "producer_heading">
+
+    <div class = "producer_heading col-md-12">
     <h2> {{producer.name}}</h2>
     </div><!-- end of producer heading div -->
     <div class = "producer_data">
-            <h3>Region: {{producer.region}}</h3>
-            <h3>Country: {{producer.nation}}</h3>
+        <div class = "row">
+            <div class = "col-md-1"> </div>
+            <div class="col-md-3"><h3>Region: <span class = "region_data">{{producer.region}}</span></h3></div>
+            <div class="col-md-3"><h3>Country: <span class = "region_data">{{producer.nation}}</span></h3></div>
+        </div><!-- end of row div -->
     </div><!-- end of producer data div -->
 
     {% for wine in winelist %}
-                    <div class="col-md-6 producer-wine-list">
-                        <p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}} | {{wine.Wine.color}}</a></p>
+            <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11 producer_wine_list">
+                        <p><a href = "{{url_for('viewWine', wine_id = wine.Wine.id)}}">{{wine.Wine.vintage}} | {{wine.Variety.name}}</a></p>
                     </div> <!-- end of wine list div -->
+            </div> <!--end of row -->
      {% endfor %}
 		{% if 'username' in session: %}
-		<div class = "conditional_links">
+		<div class = "row conditional_links">
 		{% if editFlag %}
-		</br>
-		<a href = "{{url_for('editProducer', producer_id = producer.id)}}">Edit This Producer</a>
-		</br>
-		<a href = "{{url_for('deleteProducer', producer_id = producer.id)}}">Delete Producer</a>
+            <div class="col-md-1"></div>
+            <div class="col-md-3"><a href = "{{url_for('editProducer', producer_id = producer.id)}}" class = "conditional_links">Edit This Producer</a></div>
+            <div class = "col-md-3"><a href = "{{url_for('deleteProducer', producer_id = producer.id)}}" class = "conditional_links">Delete This Producer</a></div>
 		{% endif %}
-		</div><!-- end of conditional links div -->
+		</div><!-- end of conditional link row -->
 
 	{% endif %}
 </div> <!-- end of container_fluid -->

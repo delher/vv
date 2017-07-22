@@ -1,39 +1,45 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+<div class="container_fluid">
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<h1>Add a Report</h1>
+        </div>
+    </div><!-- end of row banner main -->
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="row">
+                    <div class = "col-md-1"> </div>
+                    <div class = "col-md-11"><p class = "flash_message">{{ message }}</p></div>
+                </div><!-- end of row div -->
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+	<div class = "row">
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-11"><h3> Add a Report for: {{wine.Producer.name}} {{wine.Wine.vintage}} {{wine.Variety.name}}</h3></div>
+	</div>
+	<div class = "row">
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-11">
+			<form action = "/add/report/{{wine.Wine.id}}/" method = 'POST'>
+			<textarea rows = '4' cols = '50' name = 'report'></textarea>
 		</div>
 	</div>
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
+	<div class = "row">
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-2">
+			<input class = "edit_button" type = 'submit' value = 'Add Report'>
+		</div>
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-2"><button type="button" class="edit_button" onClick="location.href='{{url_for('viewWine', wine_id = wine.Wine.id)}}'">Cancel</button>
+		</div>
+			</form>
+		</div>
 	</div>
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-		{% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
-<h2>Add Wine Report</h2>
-	<p> Add a Report for:
-<h1>{{wine.Producer.name}}</h1>
-<h3>{{wine.Wine.vintage}} {{wine.Variety.name}}</h3>
-<form action = "/add/report/{{wine.Wine.id}}/" method = 'POST'>
-	</br></br>
-	<input type = 'textarea' rows = '4' name = 'report'></br>
-	</br></br>
-	<input type = 'submit' value = 'Add Report'>
-</form>
+</div>
 {% endblock %}

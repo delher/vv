@@ -2,13 +2,20 @@
 {% block content %}
 {% include "header.html" %}
 <div class="container_fluid">
-	<h1>Wines</h1>
+	<div class = "row banner">
+		<div class = "col-md-1">
+			<!-- spacer - nothing to see here -->
+		</div>
+		<div class = "col-md-11 padding-none">
+			<h1>Wines</h1>
+		</div> <!-- end of col-md-11 title-Wines div-->
+	</div> <!-- end of row banner div -->
 
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
-			<div class="col-md-6">
+			<div class="row col-md-12">
 			{% for message in messages %}
-      			<li class="flash_message">{{ message }}</li>
+      			<li class = "flash_message">{{ message }}</li>
     		{% endfor %} </br>
     		</div> <!-- end of flashmessages div -->
     	{% endif %}

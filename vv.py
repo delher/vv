@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from create_vv_db import Base, Producer, Variety, Wine, User, Report
 import random, string, requests, datetime, httplib2, json
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+from oauth2client import client
 app = Flask(__name__)
 
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
@@ -72,6 +73,7 @@ def gconnect():
 
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
+    print('gplus_id = {}'.format(gplus_id))
     if result['user_id'] != gplus_id:
         response = make_response(json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -94,6 +96,9 @@ def gconnect():
     # Store the access token in the session for later use.
     session['access_token'] = credentials.access_token
     session['gplus_id'] = gplus_id
+    session['credentials'] = credentials.to_json()
+
+    print(session.get('expiry'))
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -127,20 +132,17 @@ def gdisconnect():
         flash('You are not logged in.')
         return redirect(url_for('showAllWines'))
 
-    # revoke token
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-    if result['status'] == '200':
-        # reset the session
-        session.clear()
-        # display flash message on main page
-        flash('You have logged out.')
-        return redirect(url_for('showAllWines'))
-    else:
-        response = make_response(json.dumps('Failed to revoke token', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+    try:
+        credentials = client.OAuth2Credentials.from_json(session['credentials'])
+        credentials.revoke(httplib2.Http())
+    except:
+        flash('Login Expired.')
+
+    # in either case, reset the session and return the main page.
+    session.clear()
+    flash('Your login information has been cleared.')
+    return redirect(url_for('showAllWines'))
+
 
 # Producer CRUD Operations
 # 1 - Producer CREATE (Add)
@@ -230,7 +232,7 @@ def editProducer(producer_id):
 
         except:
             dbsession.rollback()
-            flash('Your changes wered not saved - Your edit may have duplicated another entry.')
+            flash('Your changes were not saved - Your edit may have duplicated another entry.')
             return redirect(url_for('viewProducer', producer_id = producer_id))
 
         flash('Your changes have been saved')
@@ -511,6 +513,6 @@ def check_producer_ID(producer_id):
 if __name__ == '__main__':
     # use a new secret key each time the program is run so that session info is cleared.
     #app.secret_key = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(32))
-    app.secret_key = "li59f8kyf03hdf42dzhf7"
+    app.secret_key = "li5900kyg03hdf42dzhf7"
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
