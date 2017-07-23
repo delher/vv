@@ -7,8 +7,8 @@ operates in ways that would not be reasonable in a system designed for the publi
 after another user has added additional content to it.
 
 REQUIREMENTS:
-Python3
-Google account
+Python3,
+Google account,
 flask, sqlalchemy, oauth2client libraries
 
 SETUP:
