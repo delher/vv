@@ -2,6 +2,7 @@ a:hover {
 	text-decoration: none;
 	color: white;
 }
+
 a.producer_main_list {
 	font-size: 26px;
 	color: #bb77bb;
@@ -24,15 +25,9 @@ a.wine_main_list:hover {
 	color: #fff;
 }
 
-.banner {
-	height: 150px;
-	background: url("/static/wineglass74x150.png");
-	background-repeat: repeat-x;
-	margin-bottom: 15px;
-}
-
 body {
-	background: #111;
+	background: #222;
+	color: #aaa;
 }
 
 h1 {
@@ -52,10 +47,59 @@ h1 {
 	border-color: rgba(0,0,0,0.2); /*Very transparent black*/
 	display:inline-flex;
 	margin-top:20px;
+}
+
+h3 {
+	font-size: 18px;
+	color: #aaa;
+	line-height: 23px;
+}
+input[type = number] {
+	font-size: 18px;
+	margin: 12px;
+	box-sizing: border-box;
+	background-color: #000;
+	color: #aaa;
+}
+
+input[type = text] {
+	font-size: 18px;
+	margin: 12px;
+	box-sizing: border-box;
+	background-color: #000;
+	color: #aaa;
+}
+
+input[type = url] {
+	font-size: 18px;
+	margin: 12px;
+	box-sizing: border-box;
+	background-color: #000;
+	color: #aaa;
 
 }
+
+select {
+	color: #aaa;
+	margin: 12px;
+	font-size: 18px;
+	background-color: #000
+}
+
+.banner {
+	height: 150px;
+	background: url("/static/wineglass74x150.png");
+	background-repeat: repeat-x;
+	margin-bottom: 15px;
+}
+
 .button_row {
 	padding-top: 10px;
+}
+
+.disabled {
+	color: #888;
+	padding: 15px;
 }
 .edit_button {
 
@@ -81,6 +125,26 @@ h1 {
 .edit_producer_text {
 	color: #dedede;
 }
+
+
+.login_button {
+
+	background-color: rgba(0,0,0,0);
+	border-radius:4px;
+    color: green;
+    font-size:20px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-right:16px;
+    border: 1px solid #4CAF50;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.login_button:hover {
+	color: #00ff00;
+	box-shadow: 0 0 4px 4px rgba(0,256,0,0.2), 0 0 4px 4px rgba(0,256,0,0.2);
+}
 .producer_heading {
 	font-size: 32px;
 	color: #bb77bb;
@@ -98,20 +162,22 @@ h1 {
 	padding: 1rem;
 }
 
+.spacer_row {
+	margin: 35px;
+}
+
 .wine_list {
 	padding: 2rem;
 	color: #dddddd;
 }
 
-.reports {
-	padding: 2rem;
-	color: #fff;
+.wine_image {
+	max-height: 200px;
+	max-width: 200px;
 }
 
-h3 {
-	font-size: 18px;
-	color: #bb77bb;
-	line-height: 23px;
+.reports {
+	color: #fff;
 }
 
 .flash_message {
@@ -125,6 +191,10 @@ h3 {
 	list-style:none;
 	margin-left: 20px;
 }
+.message_spacer {
+	margin-bottom: 10px;
+}
+
 .signInText{
 	color: #aaa;
 }

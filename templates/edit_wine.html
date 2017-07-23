@@ -1,39 +1,50 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+<div class="container-fluid">
+	<div class = "row spacer_row"> </div>
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
-			<h1>Edit a Wine</h1>
+			<h1>Wine Detail</h1>
+		</div>
+	</div> <!-- end of banner div -->
+
+{% include "messages.html" %}
+
+<form action = "/edit/wine/{{wine.Wine.id}}/" method = 'POST'>
+	<div class = "row">
+		<div class = "col-md-1"> </div>
+		<div class = "producer_heading"><h2>{{wine.Producer.name}}</h2></div>
+	</div>
+	<div class = "row">
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-10 wine_list">
+			<li><h3>{{wine.Wine.vintage}} | {{wine.Variety.name}}</h3></li></div>
+	</div>
+	<div class = "row">
+		<div class = "col-md-2"> </div>
+		<div class = "col-md-10">
+			<h3>Edit the Tag(s):</h3> <input type = 'text' size = '25' name = 'tag'
+			 value = '{{wine.Wine.tag}}'>
+			 </div>
+	</div>
+	<div class = "row">
+		<div class = "col-md-2"> </div>
+		<div class = "col-md-10">
+			<h3>Edit the Image Link:</h3>
+			<input type = 'text' size = '50' name = 'imageURL' value = {{wine.Wine.imageURL}}>
 		</div>
 	</div>
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-	</div>
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-		{% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-<form action = "/edit/wine/{{wine.Wine.id}}/" method = 'POST'>
-	<div class = "producer_heading">
-	<p><h2>{{wine.Producer.name}}</h2></p></div>
-				<div class = "wine_list">
-				<li><h3>{{wine.Wine.vintage}} | {{wine.Variety.name}}
-				</h3></li></div>
-	Edit the Tag(s): <input type = 'text' size = '25' name = 'tag' value = '{{wine.Wine.tag}}'></br>
-	Edit the Image Link:
-	<input type = 'text' size = '50' name = 'imageURL' value = {{wine.Wine.imageURL}}></br>
-	<input type = 'submit' value = 'Save Changes'>
+	<div class = "row button_row">
+		<div class = "col-md-2"> </div>
+		<div class = "col-md-2">
+			<input class="edit_button" type = 'submit' value = 'Save Changes'>
+		</div>
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-2"><button type="button" class="edit_button" onClick="location.href='{{url_for('showAllWines')}}'">Cancel</button>
+		</div><!--end of button div -->
+	</div><!--end of button row div -->
 </form>
+</div> <!-- end of container_fluid -->
 {% endblock %}

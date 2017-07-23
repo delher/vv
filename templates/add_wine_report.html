@@ -9,16 +9,8 @@
         </div>
     </div><!-- end of row banner main -->
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="row">
-                    <div class = "col-md-1"> </div>
-                    <div class = "col-md-11"><p class = "flash_message">{{ message }}</p></div>
-                </div><!-- end of row div -->
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% include "messages.html" %}
+
 	<div class = "row">
 		<div class = "col-md-1"> </div>
 		<div class = "col-md-11"><h3> Add a Report for: {{wine.Producer.name}} {{wine.Wine.vintage}} {{wine.Variety.name}}</h3></div>
@@ -27,10 +19,10 @@
 		<div class = "col-md-1"> </div>
 		<div class = "col-md-11">
 			<form action = "/add/report/{{wine.Wine.id}}/" method = 'POST'>
-			<textarea rows = '4' cols = '50' name = 'report'></textarea>
+			<textarea rows = '2' cols = '50' name = 'report'></textarea>
 		</div>
 	</div>
-	<div class = "row">
+	<div class = "row button_row">
 		<div class = "col-md-1"> </div>
 		<div class = "col-md-2">
 			<input class = "edit_button" type = 'submit' value = 'Add Report'>

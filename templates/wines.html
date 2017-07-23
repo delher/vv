@@ -2,33 +2,28 @@
 {% block content %}
 {% include "header.html" %}
 <div class="container_fluid">
+	<div class = "row spacer_row"> </div>
 	<div class = "row banner">
-		<div class = "col-md-1">
-			<!-- spacer - nothing to see here -->
-		</div>
+		<div class = "col-md-1"> </div>
 		<div class = "col-md-11 padding-none">
 			<h1>Wines</h1>
 		</div> <!-- end of col-md-11 title-Wines div-->
 	</div> <!-- end of row banner div -->
 
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			<div class="row col-md-12">
-			{% for message in messages %}
-      			<li class = "flash_message">{{ message }}</li>
-    		{% endfor %} </br>
-    		</div> <!-- end of flashmessages div -->
-    	{% endif %}
-	{% endwith %}
+{% include "messages.html" %}
 
 	{% for producer in allProducers %}
-		<div class = "producer_main_list col-md-12">
+		<div class = "row">
+			<div class = "col-md-1"> </div>
+			<div class = "producer_main_list col-md-11">
 			<a href = "{{url_for('viewProducer', producer_id = producer.id)}}" class="producer_main_list">{{producer.name}}</a>
-		</div> <!-- end of producer_main_list div -->
+			</div> <!-- end of producer_main_list div -->
+		</div> <!-- end of row -->
 		<ul><div class = "row">
 		{% for wine in allWines: %}
 			{% if producer.id == wine.Wine.producer_id: %}
-				<div class = "col-md-6">
+				<div class = "col-md-1"></div>
+				<div class = "col-md-4">
 				<li><a href="{{url_for('viewWine', wine_id = wine.Wine.id)}}"
 				class = "wine_main_list">{{wine.Wine.vintage}} | {{wine.Variety.name}}
 				 {% if wine.Wine.tag: %}
@@ -36,7 +31,8 @@
 				  {% endif %} </a></li>
 				</div> <!-- end of winelist div -->
 			{% endif %}
-		{% endfor %} </div> <!-- end of row div -->
+		{% endfor %}
+		</div> <!-- end of row div -->
 		</ul>
 	{% endfor %}
 </div> <!-- end of container_fluid col-md-12 div -->

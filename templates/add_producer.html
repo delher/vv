@@ -1,38 +1,43 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-					</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
+<div class="container-fluid">
+	<div class = "row spacer_row"> </div>
 	<div class="row banner main">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<h1>Add a Producer</h1>
 		</div>
+	</div> <!-- end of banner div -->
+
+{% include "messages.html" %}
+
+	<form action = "#" method = 'POST'>
+	<div class = "row message_spacer">
+		<div class = "col-md-1"> </div>
 	</div>
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
+
+	<div class = "row">
+		<div class = "col-md-1"></div>
+		<div class = "col-md-11"><input type = "text" name = "name" size = "50" label = "Producer Name" placeholder = "Producer Name (required)"></div>
 	</div>
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-		{% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-<form action = "#" method = 'POST'>
-	<p> Add a Producer: Fields with an asterisk (*) are required. </p>
-	* Producer:</br>
-	<input type = "text" name = "name" size = "50" label = "Producer Name" placeholder = "Producer Name">
-	</br>Country:</br>
-	<input type = "text" name = country size = "50" label = "Country" placeholder = "Country">
-	</br>Region: </br>
-	<input type = "text" name = region size = "50" label = "Region" placeholder = "Region">
-	<input type = 'submit' value = 'Add Producer'>
-</form>
+	<div class = "row">
+		<div class = "col-md-1"></div>
+		<div class = "col-md-11"><input type = "text" name = country size = "50" label = "Country" placeholder = "Country"></div>
+	</div>
+	<div class = "row">
+		<div class = "col-md-1"></div>
+		<div class = "col-md-11"><input type = "text" name = region size = "50" label = "Region" placeholder = "Region"></div>
+	</div>
+	<div class = "row button_row">
+		<div class = "col-md-1"> </div>
+		<div class = "col-md-2">
+			<input class="edit_button" type = 'submit' value = 'Save Changes'>
+		</div>
+		<div class = "col-md-1"> </div></form>
+		<div class = "col-md-2"><button type="button" class="edit_button" onClick="location.href='{{url_for('showAllWines')}}'">Cancel</button>
+		</div><!--end of button div -->
+
+
+
 {% endblock %}

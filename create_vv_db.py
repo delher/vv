@@ -1,6 +1,7 @@
 import os
 import sys
-import random, string
+import random
+import string
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -8,12 +9,14 @@ from sqlalchemy import create_engine, Enum
 from sqlalchemy.dialects.sqlite import DATE, DATETIME
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
     name = Column(String(100))
     email = Column(String(100))
     authlevel = Column(Integer)
+
 
 class Producer(Base):
     __tablename__ = 'producer'
@@ -24,11 +27,13 @@ class Producer(Base):
     added_by_id = Column(Integer, ForeignKey('user.id'))
     added_by = relationship(User, backref='producers')
 
+
 class Variety(Base):
     __tablename__ = 'variety'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable = False)
+    name = Column(String(250), nullable=False)
     color = Column(String(50))
+
 
 class Wine(Base):
     __tablename__ = 'wine'
@@ -47,22 +52,24 @@ class Wine(Base):
     @property
     def serialize(self):
         return {
-        'id': self.id,
-        'variety_id': self.variety_id,
-        'vintage': self.vintage,
-        'tag': self.tag,
-        'imageURL': self.imageURL
-        }
+            'id': self.id,
+            'variety_id': self.variety_id,
+            'vintage': self.vintage,
+            'tag': self.tag,
+            'imageURL': self.imageURL
+            }
+
 
 class Report(Base):
     __tablename__ = 'report'
     id = Column(Integer, primary_key=True)
     wine_id = Column(Integer, ForeignKey('wine.id'))
-    wine = relationship(Wine, backref = 'reports')
+    wine = relationship(Wine, backref='reports')
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User, backref = 'reports')
+    user = relationship(User, backref='reports')
     user_report = Column(String, nullable=False)
     entry_time = Column(DATETIME, nullable=False)
+
 
 engine = create_engine('sqlite:///vv.db')
 Base.metadata.create_all(engine)
