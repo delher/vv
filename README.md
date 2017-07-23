@@ -12,8 +12,8 @@ Google account,
 flask, sqlalchemy, oauth2client libraries
 
 SETUP:
-Run create_vv_db.py
-Run populate_vv_db.py
+Run create_vv_db.py,
+Run populate_vv_db.py,
 Run vv.py
 
 GUIDE:
